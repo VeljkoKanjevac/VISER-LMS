@@ -49,4 +49,17 @@ class User extends Authenticatable
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function referralCodes(): HasMany
+    {
+        return $this->hasMany(ReferralCode::class);
+    }
+
+    public function referralCommissions(): HasMany
+    {
+        return $this->hasMany(
+            ReferralCommission::class,
+            'referred_user_id'
+        );
+    }
 }

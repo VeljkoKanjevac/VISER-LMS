@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Course extends Model
 {
@@ -12,17 +13,18 @@ class Course extends Model
         'name',
         'slug',
         'description',
-        'price',
         'is_active',
         'sort_order',
+        'faculty_id',
+        'study_year',
     ];
 
     protected function casts(): array
     {
         return [
-            'price' => 'integer',
             'is_active' => 'boolean',
             'sort_order' => 'integer',
+            'study_year' => 'integer',
         ];
     }
 
@@ -47,4 +49,17 @@ class Course extends Model
     {
         return $this->hasMany(Consultation::class);
     }
+
+    public function faculty(): BelongsTo
+    {
+        return $this->belongsTo(Faculty::class);
+    }
+
+    public function offers(): BelongsToMany
+    {
+        return $this->belongsToMany(Offer::class)
+            ->withTimestamps();
+    }
+
+
 }

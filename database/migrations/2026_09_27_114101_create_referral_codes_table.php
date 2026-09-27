@@ -8,19 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+        Schema::create('referral_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->text('description')->nullable();
+
+            $table->foreignId('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->foreignId('offer_id')
+                ->constrained()
+                ->cascadeOnDelete();
+
+            $table->string('code')->unique();
+
             $table->boolean('is_active')->default(true);
-            $table->unsignedInteger('sort_order')->default(0);
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::dropIfExists('referral_codes');
     }
 };
