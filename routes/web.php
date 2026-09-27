@@ -8,7 +8,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('student.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -18,9 +18,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-        Route::get('/', function () {
-            return 'Admin dashboard';
-        })->name('admin.dashboard');
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
 });
 
 require __DIR__.'/auth.php';
