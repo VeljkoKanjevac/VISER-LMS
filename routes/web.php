@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\CourseController;
-use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\FacultyController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,10 +23,15 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::resource('faculties', FacultyController::class)->except('show');
     Route::patch('faculties/{faculty}/toggle-active', [FacultyController::class, 'toggleActive'])->name('faculties.toggle-active');
+
     Route::patch('courses/{course}/toggle-active', [CourseController::class, 'toggleActive'])->name('courses.toggle-active');
     Route::resource('courses', CourseController::class)->except('show');
+
+    Route::patch('sections/{section}/toggle-published', [SectionController::class, 'togglePublished'])->name('sections.toggle-published');
+    Route::resource('sections', SectionController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';

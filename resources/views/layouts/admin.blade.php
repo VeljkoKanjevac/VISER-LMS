@@ -62,7 +62,7 @@
                     Kursevi
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.sections.index') }}" class="nav-link">
                     Sekcije
                 </a>
 
