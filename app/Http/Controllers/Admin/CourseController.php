@@ -6,47 +6,35 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreCourseRequest;
 use App\Http\Requests\Admin\UpdateCourseRequest;
 use App\Models\Course;
-use App\Models\Faculty;
+use App\Services\Admin\CourseService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class CourseController extends Controller
 {
+    public function __construct(
+        private readonly CourseService $courseService
+    ) {}
+
     public function index(): View
     {
-        $courses = Course::query()
-            ->with('faculty')
-            ->withCount([
-                'sections',
-                'enrollments',
-                'consultations',
-                'offers',
-            ])
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
-
         return view('admin.courses.index', [
-            'courses' => $courses,
+            'courses' => $this->courseService->getAllForAdmin(),
         ]);
     }
 
     public function create(): View
     {
-        $faculties = Faculty::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
-
         return view('admin.courses.create', [
-            'faculties' => $faculties,
+            'faculties' => $this->courseService->getFacultiesForCreate(),
         ]);
     }
 
     public function store(StoreCourseRequest $request): RedirectResponse
     {
-        Course::create($request->validated());
+        $this->courseService->create(
+            $request->validated()
+        );
 
         return redirect()
             ->route('admin.courses.index')
@@ -55,19 +43,10 @@ class CourseController extends Controller
 
     public function edit(Course $course): View
     {
-        $faculties = Faculty::query()
-            ->where(function ($query) use ($course) {
-                $query
-                    ->where('is_active', true)
-                    ->orWhere('id', $course->faculty_id);
-            })
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
-
         return view('admin.courses.edit', [
             'course' => $course,
-            'faculties' => $faculties,
+            'faculties' => $this->courseService
+                ->getFacultiesForEdit($course),
         ]);
     }
 
@@ -75,7 +54,10 @@ class CourseController extends Controller
         UpdateCourseRequest $request,
         Course $course
     ): RedirectResponse {
-        $course->update($request->validated());
+        $this->courseService->update(
+            $course,
+            $request->validated()
+        );
 
         return redirect()
             ->route('admin.courses.index')
@@ -84,13 +66,9 @@ class CourseController extends Controller
 
     public function destroy(Course $course): RedirectResponse
     {
-        $hasRelatedData =
-            $course->sections()->exists()
-            || $course->enrollments()->exists()
-            || $course->consultations()->exists()
-            || $course->offers()->exists();
+        $deleted = $this->courseService->delete($course);
 
-        if ($hasRelatedData) {
+        if (! $deleted) {
             return redirect()
                 ->route('admin.courses.index')
                 ->with(
@@ -99,8 +77,6 @@ class CourseController extends Controller
                 );
         }
 
-        $course->delete();
-
         return redirect()
             ->route('admin.courses.index')
             ->with('success', 'Kurs je uspešno obrisan.');
@@ -108,9 +84,7 @@ class CourseController extends Controller
 
     public function toggleActive(Course $course): RedirectResponse
     {
-        $course->update([
-            'is_active' => ! $course->is_active,
-        ]);
+        $this->courseService->toggleActive($course);
 
         $message = $course->is_active
             ? 'Kurs je uspešno aktiviran.'

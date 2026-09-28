@@ -6,21 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreFacultyRequest;
 use App\Http\Requests\Admin\UpdateFacultyRequest;
 use App\Models\Faculty;
+use App\Services\Admin\FacultyService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class FacultyController extends Controller
 {
+    public function __construct(
+        private readonly FacultyService $facultyService
+    ) {}
+
     public function index(): View
     {
-        $faculties = Faculty::query()
-            ->withCount(['courses', 'offers'])
-            ->orderBy('sort_order')
-            ->orderBy('name')
-            ->get();
-
         return view('admin.faculties.index', [
-            'faculties' => $faculties,
+            'faculties' => $this->facultyService->getAllForAdmin(),
         ]);
     }
 
@@ -31,7 +30,9 @@ class FacultyController extends Controller
 
     public function store(StoreFacultyRequest $request): RedirectResponse
     {
-        Faculty::create($request->validated());
+        $this->facultyService->create(
+            $request->validated()
+        );
 
         return redirect()
             ->route('admin.faculties.index')
@@ -45,11 +46,12 @@ class FacultyController extends Controller
         ]);
     }
 
-    public function update(
-        UpdateFacultyRequest $request,
-        Faculty $faculty
-    ): RedirectResponse {
-        $faculty->update($request->validated());
+    public function update(UpdateFacultyRequest $request, Faculty $faculty): RedirectResponse
+    {
+        $this->facultyService->update(
+            $faculty,
+            $request->validated()
+        );
 
         return redirect()
             ->route('admin.faculties.index')
@@ -58,7 +60,9 @@ class FacultyController extends Controller
 
     public function destroy(Faculty $faculty): RedirectResponse
     {
-        if ($faculty->courses()->exists() || $faculty->offers()->exists()) {
+        $deleted = $this->facultyService->delete($faculty);
+
+        if (! $deleted) {
             return redirect()
                 ->route('admin.faculties.index')
                 ->with(
@@ -67,8 +71,6 @@ class FacultyController extends Controller
                 );
         }
 
-        $faculty->delete();
-
         return redirect()
             ->route('admin.faculties.index')
             ->with('success', 'Fakultet je uspešno obrisan.');
@@ -76,9 +78,7 @@ class FacultyController extends Controller
 
     public function toggleActive(Faculty $faculty): RedirectResponse
     {
-        $faculty->update([
-            'is_active' => ! $faculty->is_active,
-        ]);
+        $this->facultyService->toggleActive($faculty);
 
         $message = $faculty->is_active
             ? 'Fakultet je uspešno aktiviran.'
