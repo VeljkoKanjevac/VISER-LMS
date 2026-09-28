@@ -13,7 +13,7 @@ return new class extends Migration
 
             $table->foreignId('faculty_id')
                 ->constrained()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
 
             $table->string('name');
             $table->string('slug')->unique();

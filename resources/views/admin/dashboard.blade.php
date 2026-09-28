@@ -16,7 +16,7 @@
                     </div>
 
                     <div class="fs-3 fw-bold">
-                        {{ \App\Models\Faculty::count() }}
+                        {{ $statistics['faculties_count'] }}
                     </div>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="fs-3 fw-bold">
-                        {{ \App\Models\Course::count() }}
+                        {{ $statistics['courses_count'] }}
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="fs-3 fw-bold">
-                        {{ \App\Models\Offer::count() }}
+                        {{ $statistics['offers_count'] }}
                     </div>
                 </div>
             </div>
@@ -54,11 +54,11 @@
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <div class="text-muted mb-2">
-                        Korisnici
+                        Studenti
                     </div>
 
                     <div class="fs-3 fw-bold">
-                        {{ \App\Models\User::count() }}
+                        {{ $statistics['users_count'] }}
                     </div>
                 </div>
             </div>

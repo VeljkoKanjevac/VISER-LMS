@@ -54,11 +54,11 @@
                     Sadržaj
                 </div>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.faculties.index') }}" class="nav-link">
                     Fakulteti
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.courses.index') }}" class="nav-link">
                     Kursevi
                 </a>
 

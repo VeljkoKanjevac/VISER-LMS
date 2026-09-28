@@ -12,7 +12,7 @@ return new class extends Migration
             $table->foreignId('faculty_id')
                 ->after('id')
                 ->constrained()
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
         });
     }
 
