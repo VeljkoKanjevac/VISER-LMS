@@ -151,12 +151,20 @@
                                 </td>
 
                                 <td class="text-end">
-                                    <div class="d-inline-flex gap-2">
+                                    <div class="d-inline-flex align-items-center gap-2 flex-nowrap">
+
+                                        <a
+                                            href="{{ route('admin.lesson-materials.index', ['lesson_id' => $lesson->id]) }}"
+                                            class="btn btn-sm btn-outline-info text-nowrap"
+                                            style="min-width: 125px;"
+                                        >
+                                            Materijali ({{ $lesson->materials_count }})
+                                        </a>
 
                                         <a
                                             href="{{ route('admin.lessons.edit', $lesson) }}"
                                             class="btn btn-sm btn-outline-primary"
-                                            style="width: 100px;"
+                                            style="min-width: 90px;"
                                         >
                                             Izmeni
                                         </a>
@@ -166,6 +174,7 @@
                                             <form
                                                 method="POST"
                                                 action="{{ route('admin.lessons.destroy', $lesson) }}"
+                                                class="m-0"
                                                 onsubmit="return confirm('Da li sigurno želiš da obrišeš ovu lekciju?');"
                                             >
                                                 @csrf
@@ -174,7 +183,7 @@
                                                 <button
                                                     type="submit"
                                                     class="btn btn-sm btn-outline-danger"
-                                                    style="width: 100px;"
+                                                    style="min-width: 90px;"
                                                 >
                                                     Obriši
                                                 </button>
@@ -185,6 +194,7 @@
                                             <form
                                                 method="POST"
                                                 action="{{ route('admin.lessons.toggle-published', $lesson) }}"
+                                                class="m-0"
                                             >
                                                 @csrf
                                                 @method('PATCH')
@@ -192,7 +202,7 @@
                                                 <button
                                                     type="submit"
                                                     class="btn btn-sm {{ $lesson->is_published ? 'btn-outline-warning' : 'btn-outline-success' }}"
-                                                    style="width: 100px;"
+                                                    style="min-width: 90px;"
                                                     @if ($lesson->is_published)
                                                         onclick="return confirm('Da li želiš da sakriješ ovu lekciju?');"
                                                     @endif

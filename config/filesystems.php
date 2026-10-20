@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        'lesson_materials' => [
+            'driver' => 'local',
+            'root' => storage_path('app/private/lesson-materials'),
+            'visibility' => 'private',
+            'throw' => true,
+        ],
+
     ],
 
     /*

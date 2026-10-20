@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\LessonController;
+use App\Http\Controllers\Admin\LessonMaterialController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,6 +37,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::patch('lessons/{lesson}/toggle-published', [LessonController::class, 'togglePublished'])->name('lessons.toggle-published');
     Route::resource('lessons', LessonController::class)->except('show');
+
+    Route::get('lesson-materials', [LessonMaterialController::class, 'index'])->name('lesson-materials.index');
+    Route::post('lesson-materials', [LessonMaterialController::class, 'store'])->name('lesson-materials.store');
+    Route::put('lesson-materials/{lessonMaterial}', [LessonMaterialController::class, 'update'])->name('lesson-materials.update');
+    Route::delete('lesson-materials/{lessonMaterial}', [LessonMaterialController::class, 'destroy'])->name('lesson-materials.destroy');
+    Route::get('lesson-materials/{lessonMaterial}/download', [LessonMaterialController::class, 'download'])->name('lesson-materials.download');
 });
 
 require __DIR__.'/auth.php';

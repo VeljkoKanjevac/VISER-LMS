@@ -44,4 +44,21 @@ class LessonRepository
             ->orderBy('title')
             ->get();
     }
+
+    public function getAllForMaterialForm(): Collection
+    {
+        return Lesson::query()
+            ->with('section.course.faculty')
+            ->orderBy('section_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+    }
+
+    public function findForMaterialManagement(int $id): ?Lesson
+    {
+        return Lesson::query()
+            ->with('section.course.faculty')
+            ->find($id);
+    }
 }
