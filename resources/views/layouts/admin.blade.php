@@ -66,7 +66,7 @@
                     Sekcije
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.lessons.index') }}" class="nav-link">
                     Lekcije
                 </a>
 

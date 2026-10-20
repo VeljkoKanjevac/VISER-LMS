@@ -45,4 +45,69 @@ class SectionRepository
             ->orderBy('title')
             ->get();
     }
+
+    public function getPublished(): Collection
+    {
+        return Section::query()
+            ->with('course.faculty')
+            ->where('is_published', true)
+            ->whereHas('course', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->orderBy('course_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+    }
+
+    public function getPublishedOrCurrent(int $sectionId): Collection
+    {
+        return Section::query()
+            ->with('course.faculty')
+            ->where(function ($query) use ($sectionId) {
+                $query
+                    ->where(function ($query) {
+                        $query
+                            ->where('is_published', true)
+                            ->whereHas('course', function ($query) {
+                                $query->where('is_active', true);
+                            });
+                    })
+                    ->orWhere('id', $sectionId);
+            })
+            ->orderBy('course_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+    }
+
+    public function getForLessonCreate(): Collection
+    {
+        return Section::query()
+            ->with('course.faculty')
+            ->whereHas('course', function ($query) {
+                $query->where('is_active', true);
+            })
+            ->orderBy('course_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+    }
+
+    public function getForLessonEdit(int $sectionId): Collection
+    {
+        return Section::query()
+            ->with('course.faculty')
+            ->where(function ($query) use ($sectionId) {
+                $query
+                    ->whereHas('course', function ($query) {
+                        $query->where('is_active', true);
+                    })
+                    ->orWhere('id', $sectionId);
+            })
+            ->orderBy('course_id')
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->get();
+    }
 }

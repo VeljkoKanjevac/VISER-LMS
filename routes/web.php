@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\FacultyController;
+use App\Http\Controllers\Admin\LessonController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,6 +33,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     Route::patch('sections/{section}/toggle-published', [SectionController::class, 'togglePublished'])->name('sections.toggle-published');
     Route::resource('sections', SectionController::class)->except('show');
+
+    Route::patch('lessons/{lesson}/toggle-published', [LessonController::class, 'togglePublished'])->name('lessons.toggle-published');
+    Route::resource('lessons', LessonController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';
