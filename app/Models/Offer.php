@@ -47,4 +47,10 @@ class Offer extends Model
     {
         return $this->hasMany(ReferralCode::class);
     }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
 }

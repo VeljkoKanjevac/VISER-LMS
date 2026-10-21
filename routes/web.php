@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\LessonMaterialController;
+use App\Http\Controllers\Admin\ConsultationController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -43,6 +44,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('lesson-materials/{lessonMaterial}', [LessonMaterialController::class, 'update'])->name('lesson-materials.update');
     Route::delete('lesson-materials/{lessonMaterial}', [LessonMaterialController::class, 'destroy'])->name('lesson-materials.destroy');
     Route::get('lesson-materials/{lessonMaterial}/download', [LessonMaterialController::class, 'download'])->name('lesson-materials.download');
+
+    Route::patch('consultations/{consultation}/link', [ConsultationController::class, 'updateLink'])->name('consultations.update-link');
+    Route::patch('consultations/{consultation}/toggle-active', [ConsultationController::class, 'toggleActive'])->name('consultations.toggle-active');
+    Route::resource('consultations', ConsultationController::class)->except('show');
 });
 
 require __DIR__.'/auth.php';

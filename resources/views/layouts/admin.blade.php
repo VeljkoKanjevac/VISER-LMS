@@ -70,7 +70,7 @@
                     Lekcije
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.consultations.index') }}" class="nav-link">
                     Konsultacije
                 </a>
 
