@@ -82,4 +82,22 @@ class CourseRepository
             ->orderBy('name')
             ->get();
     }
+
+    public function getForOfferForm(): Collection
+    {
+        return \App\Models\Course::query()
+            ->with('faculty')
+            ->orderBy('faculty_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+    }
+
+    public function countMatchingFaculty(array $courseIds, int $facultyId): int {
+        return \App\Models\Course::query()
+            ->whereIn('id', $courseIds)
+            ->where('faculty_id', $facultyId)
+            ->count();
+    }
+
 }

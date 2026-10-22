@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\LessonMaterialController;
 use App\Http\Controllers\Admin\ConsultationController;
+use App\Http\Controllers\Admin\OfferController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -48,6 +49,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('consultations/{consultation}/link', [ConsultationController::class, 'updateLink'])->name('consultations.update-link');
     Route::patch('consultations/{consultation}/toggle-active', [ConsultationController::class, 'toggleActive'])->name('consultations.toggle-active');
     Route::resource('consultations', ConsultationController::class)->except('show');
+
+    Route::patch('offers/{offer}/toggle-active', [OfferController::class, 'toggleActive'])->name('offers.toggle-active');
+    Route::resource('offers', OfferController::class)->except(['show']);
+
 });
 
 require __DIR__.'/auth.php';

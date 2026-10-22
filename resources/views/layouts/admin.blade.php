@@ -80,7 +80,7 @@
                     Prodaja
                 </div>
 
-                <a href="#" class="nav-link">
+                <a href="{{ route('admin.offers.index') }}" class="nav-link">
                     Ponude
                 </a>
 
