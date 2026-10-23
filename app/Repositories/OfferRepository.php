@@ -73,4 +73,20 @@ class OfferRepository
             ->get();
     }
 
+    public function getActiveForStudents(): Collection
+    {
+        return Offer::query()
+            ->with([
+                'faculty',
+                'courses',
+            ])
+            ->where('is_active', true)
+            ->whereHas('courses')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->get();
+    }
+
+
+
 }

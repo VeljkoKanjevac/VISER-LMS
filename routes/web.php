@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\OfferController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReferralCodeController;
+use App\Http\Controllers\Student\EnrollmentRequestController;
+use App\Http\Controllers\Student\OfferController as StudentOfferController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +29,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+Route::middleware(['auth'])->prefix('student')->name('student.')->group(function () {
+    Route::post('/offers/{offer}/enrollment-request', [EnrollmentRequestController::class, 'store'])->name('enrollment-requests.store');
+    Route::get('/offers', [StudentOfferController::class, 'index'])->name('offers.index');
+
+    Route::get('/enrollment-requests', [EnrollmentRequestController::class, 'index'])->name('enrollment-requests.index');
+});
+
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');

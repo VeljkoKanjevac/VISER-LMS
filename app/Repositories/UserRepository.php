@@ -58,4 +58,14 @@ class UserRepository
             ->orderBy('name')
             ->get();
     }
+
+
+    public function lockForUpdate(int $userId): ?User
+    {
+        return User::query()
+            ->whereKey($userId)
+            ->lockForUpdate()
+            ->first();
+    }
+
 }

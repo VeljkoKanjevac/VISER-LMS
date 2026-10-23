@@ -45,6 +45,11 @@ class OfferService
         return $this->offerRepository->loadCourses($offer);
     }
 
+    public function getActiveForStudents(): \Illuminate\Database\Eloquent\Collection
+    {
+        return $this->offerRepository->getActiveForStudents();
+    }
+
     public function create(array $data): Offer
     {
         $courseIds = $data['course_ids'];
