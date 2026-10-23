@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\LessonController;
 use App\Http\Controllers\Admin\LessonMaterialController;
 use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\OfferController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\ReferralCodeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,6 +55,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('offers/{offer}/toggle-active', [OfferController::class, 'toggleActive'])->name('offers.toggle-active');
     Route::resource('offers', OfferController::class)->except(['show']);
 
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+
+    Route::get('/referral-codes', [ReferralCodeController::class, 'index'])->name('referral-codes.index');
+    Route::get('/referral-codes/create', [ReferralCodeController::class, 'create'])->name('referral-codes.create');
+    Route::post('/referral-codes', [ReferralCodeController::class, 'store'])->name('referral-codes.store');
+    Route::patch('/referral-codes/{referralCode}/toggle-active', [ReferralCodeController::class, 'toggleActive',])->name('referral-codes.toggle-active');
+    Route::delete('/referral-codes/{referralCode}', [ReferralCodeController::class, 'destroy',])->name('referral-codes.destroy');
 });
 
 require __DIR__.'/auth.php';

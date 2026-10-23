@@ -34,8 +34,7 @@ class OfferRepository
 
     public function hasRelatedData(Offer $offer): bool
     {
-        return $offer->payments()->exists()
-            || $offer->referralCodes()->exists();
+        return $offer->payments()->exists();
     }
 
     public function hasPayments(Offer $offer): bool
@@ -67,7 +66,7 @@ class OfferRepository
     {
         return Offer::query()
             ->with(['faculty', 'courses'])
-            ->withCount(['payments', 'referralCodes'])
+            ->withCount('payments')
             ->orderBy('faculty_id')
             ->orderBy('sort_order')
             ->orderBy('name')

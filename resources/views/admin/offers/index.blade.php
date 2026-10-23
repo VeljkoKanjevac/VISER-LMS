@@ -173,7 +173,6 @@
                                         {{-- Brisanje --}}
                                         @if (
                                             $offer->payments_count === 0
-                                            && $offer->referral_codes_count === 0
                                         )
                                             <form
                                                 method="POST"

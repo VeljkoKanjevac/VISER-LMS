@@ -77,18 +77,14 @@ class OfferService
             (int) $data['faculty_id']
         );
 
-        // Fakultet se ne može menjati ako postoje uplate
-        // ili referral kodovi.
         if ((int) $data['faculty_id'] !== (int) $offer->faculty_id
-            && $this->offerRepository->hasRelatedData($offer)) {
-                throw ValidationException::withMessages([
+            && $this->offerRepository->hasPayments($offer)) {
+            throw ValidationException::withMessages([
                 'faculty_id' =>
-                    'Fakultet ponude koja ima uplate ili referral kodove ne može se menjati.',
+                    'Fakultet ponude sa evidentiranim uplatama ne može se menjati.',
             ]);
         }
 
-        // Nakon prve uplate ne dozvoljavamo promenu kurseva
-        // koji su uključeni u ponudu.
         if ($this->offerRepository->hasPayments($offer)) {
             $existingCourseIds = $this->offerRepository
                 ->getCourseIds($offer);

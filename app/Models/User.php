@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -50,9 +51,9 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    public function referralCodes(): HasMany
+    public function referralCode(): HasOne
     {
-        return $this->hasMany(ReferralCode::class);
+        return $this->hasOne(ReferralCode::class);
     }
 
     public function referralCommissions(): HasMany

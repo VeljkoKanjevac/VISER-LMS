@@ -43,11 +43,6 @@ class Offer extends Model
             ->withTimestamps();
     }
 
-    public function referralCodes(): HasMany
-    {
-        return $this->hasMany(ReferralCode::class);
-    }
-
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
