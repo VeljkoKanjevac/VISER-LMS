@@ -139,28 +139,137 @@
 
                         @if($enrollmentRequest->isPending())
 
-                            <div class="alert alert-info mt-4 mb-0">
-                                <div class="fw-semibold mb-2">
-                                    <i class="bi bi-bank me-2"></i>
-                                    Bankovna uplata
-                                </div>
 
-                                <p class="small mb-2">
-                                    Tvoj zahtev je uspešno evidentiran.
-                                    Uplati prikazani iznos prema instrukcijama
-                                    koje će biti dostupne ovde.
-                                </p>
+                            <div class="card border-primary-subtle bg-primary-subtle mt-4">
+                                <div class="card-body p-3 p-md-4">
 
-                                <div class="small">
-                                    <strong>Identifikacija zahteva:</strong>
-                                    #{{ $enrollmentRequest->id }}
-                                </div>
+                                    <h6 class="fw-bold mb-3">
+                                        <i class="bi bi-bank me-2"></i>
+                                        Instrukcije za uplatu
+                                    </h6>
 
-                                <div class="small mt-2">
-                                    Pristup kursevima biće aktiviran
-                                    nakon što administrator potvrdi uplatu.
+                                    @if(
+                                        config('payment.bank_account') &&
+                                        config('payment.recipient_name') &&
+                                        config('payment.recipient_address')
+                                    )
+
+                                        <div class="mb-3">
+                                            <div class="text-muted small">Primalac</div>
+                                            <div class="fw-semibold">
+                                                {{ config('payment.recipient_name') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="text-muted small">Adresa primaoca</div>
+                                            <div class="fw-semibold">
+                                                {{ config('payment.recipient_address') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="text-muted small">Broj računa</div>
+                                            <div class="fw-bold fs-5 text-break">
+                                                {{ config('payment.bank_account') }}
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <div class="text-muted small">Svrha uplate</div>
+                                            <div class="fw-semibold">
+                                                {{ config('payment.payment_purpose') }}
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="mb-3">
+                                            <div class="text-muted small">
+                                                Iznos za uplatu
+                                            </div>
+
+                                            <div class="fw-bold fs-3 text-primary">
+                                                {{ number_format($enrollmentRequest->amount, 0, ',', '.') }}
+                                                RSD
+                                            </div>
+                                        </div>
+
+                                        <div class="small mb-3">
+                                            <strong>Broj zahteva:</strong>
+                                            #{{ $enrollmentRequest->id }}
+                                        </div>
+
+                                        <div class="alert alert-light border small">
+                                            Nakon izvršene uplate pošalji potvrdu putem
+                                            WhatsApp-a. Pristup kursevima biće aktiviran
+                                            kada administrator proveri i potvrdi uplatu.
+                                        </div>
+
+                                        @if(config('payment.support_whatsapp'))
+
+                                            @php
+                                                $whatsappMessage = implode("\n", [
+                                                    'Zdravo, izvršio/la sam uplatu za EDU Platform.',
+                                                    '',
+                                                    'Broj zahteva: #' . $enrollmentRequest->id,
+                                                    'Ponuda: ' . ($enrollmentRequest->offer?->name ?? 'Nepoznata ponuda'),
+                                                    'Iznos: ' . number_format($enrollmentRequest->amount, 0, ',', '.') . ' RSD',
+                                                    '',
+                                                    'U prilogu šaljem potvrdu o uplati.',
+                                                ]);
+
+                                                $whatsappUrl = 'https://wa.me/'
+                                                    . config('payment.support_whatsapp')
+                                                    . '?text='
+                                                    . rawurlencode($whatsappMessage);
+                                            @endphp
+
+                                            <a
+                                                href="{{ $whatsappUrl }}"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                class="btn btn-success w-100 fw-semibold py-2"
+                                            >
+                                                <i class="bi bi-whatsapp me-2"></i>
+                                                Pošalji potvrdu putem WhatsApp-a
+                                            </a>
+
+                                            <div class="text-center mt-3">
+
+                                                <p class="text-muted small mb-2">
+                                                    Ako ne koristiš WhatsApp na ovom uređaju,
+                                                    možeš ručno započeti razgovor na broj:
+                                                </p>
+
+                                                <div class="fw-bold fs-5 mb-2">
+                                                    <i class="bi bi-telephone me-2"></i>
+                                                    +{{ config('payment.support_whatsapp') }}
+                                                </div>
+
+                                                <p class="text-muted small mb-0">
+                                                    Prilikom slanja potvrde obavezno navedi
+                                                    broj zahteva
+                                                    <strong>#{{ $enrollmentRequest->id }}</strong>
+                                                    kako bismo mogli da identifikujemo tvoju uplatu.
+                                                </p>
+
+                                            </div>
+
+                                        @endif
+
+                                    @else
+
+                                        <div class="alert alert-warning mb-0">
+                                            Podaci za bankovnu uplatu trenutno nisu dostupni.
+                                            Kontaktiraj podršku pre izvršenja uplate.
+                                        </div>
+
+                                    @endif
+
                                 </div>
                             </div>
+
 
                         @elseif($enrollmentRequest->isConfirmed())
 

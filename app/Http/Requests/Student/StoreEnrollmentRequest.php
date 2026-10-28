@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Student;
 
 use App\Models\Offer;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEnrollmentRequestRequest extends FormRequest
+class StoreEnrollmentRequest extends FormRequest
 {
     /**
      * Samo prijavljeni studenti mogu slati zahteve.

@@ -70,10 +70,12 @@ class EnrollmentRequestRepository
 
     public function findForUpdate(int $id): ?EnrollmentRequest
     {
-        return EnrollmentRequest::query()
+        $request = EnrollmentRequest::query()
             ->whereKey($id)
             ->lockForUpdate()
             ->first();
+
+        return $request?->load('offer.courses');
     }
 
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreEnrollmentRequestRequest;
+use App\Http\Requests\Student\StoreEnrollmentRequest;
 use App\Models\Offer;
 use App\Services\Student\EnrollmentRequestService;
 use Illuminate\Contracts\View\View;
@@ -15,9 +15,6 @@ class EnrollmentRequestController extends Controller
         private readonly EnrollmentRequestService $enrollmentRequestService
     ) {}
 
-    /**
-     * Prikazuje sve zahteve prijavljenog studenta.
-     */
     public function index(): View
     {
         $userId = (int) auth()->id();
@@ -30,12 +27,10 @@ class EnrollmentRequestController extends Controller
         ]);
     }
 
-    /**
-     * Student šalje zahtev za kupovinu ponude.
-     */
+
     public function store(
-        StoreEnrollmentRequestRequest $request,
-        Offer $offer
+        StoreEnrollmentRequest $request,
+        Offer                  $offer
     ): RedirectResponse {
         $validated = $request->validated();
 
@@ -46,7 +41,7 @@ class EnrollmentRequestController extends Controller
         );
 
         return redirect()
-            ->route('student.offers.index')
+            ->route('student.enrollment-requests.index')
             ->with(
                 'success',
                 'Zahtev za upis je uspešno poslat.'

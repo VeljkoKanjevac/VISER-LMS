@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ReferralCodeController;
 use App\Http\Controllers\Student\EnrollmentRequestController;
 use App\Http\Controllers\Student\OfferController as StudentOfferController;
+use App\Http\Controllers\Admin\EnrollmentRequestController as AdminEnrollmentRequestController;
 
 
 Route::get('/', function () {
@@ -75,6 +76,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/referral-codes', [ReferralCodeController::class, 'store'])->name('referral-codes.store');
     Route::patch('/referral-codes/{referralCode}/toggle-active', [ReferralCodeController::class, 'toggleActive',])->name('referral-codes.toggle-active');
     Route::delete('/referral-codes/{referralCode}', [ReferralCodeController::class, 'destroy',])->name('referral-codes.destroy');
+
+    Route::get('/enrollment-requests', [AdminEnrollmentRequestController::class, 'index'])->name('enrollment-requests.index');
+    Route::patch('/enrollment-requests/{enrollmentRequest}/confirm', [AdminEnrollmentRequestController::class, 'confirm'])->name('enrollment-requests.confirm');
+    Route::patch('/enrollment-requests/{enrollmentRequest}/reject', [AdminEnrollmentRequestController::class, 'reject'])->name('enrollment-requests.reject');
+
 });
 
 require __DIR__.'/auth.php';

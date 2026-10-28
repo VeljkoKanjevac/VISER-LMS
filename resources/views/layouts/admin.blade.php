@@ -195,12 +195,22 @@
                 </div>
 
                 <a
+                    href="{{ route('admin.enrollment-requests.index') }}"
+                    class="nav-link {{ request()->routeIs('admin.enrollment-requests.*') ? 'active' : '' }}"
+                >
+                    <i class="bi bi-file-earmark-check"></i>
+                    <span>Zahtevi za upis</span>
+                </a>
+
+
+                <a
                     href="{{ route('admin.offers.index') }}"
                     class="nav-link {{ request()->routeIs('admin.offers.*') ? 'active' : '' }}"
                 >
                     <i class="bi bi-tags"></i>
                     <span>Ponude</span>
                 </a>
+
 
                 {{-- Uplate - modul još nije implementiran --}}
                 <span
